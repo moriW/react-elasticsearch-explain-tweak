@@ -3,7 +3,8 @@ export enum ChildrenCalculation {
     Product = "product",
     Sum = "sum",
     Max = "max",
-    None = "none"
+    None = "none",
+    FormulaVariables = "formula_variables"
 }
 
 export enum ScoreComponentType {
@@ -11,6 +12,8 @@ export enum ScoreComponentType {
     Idf = "idf",
     TfNorm = "tf_norm",
     Boost = "boost",
+    DocumentFrequency = "doc_freq",
+    DocumentCount = "doc_count"
 }
 
 export interface ScoreComponent {
@@ -19,5 +22,10 @@ export interface ScoreComponent {
     children: ScoreComponent[],
     label: string,
     result: number,
-    modifiedResult: number
+    modifiedResult: number,
+    getChildByType: { (type: ScoreComponentType): ScoreComponent }
+}
+
+export interface IdfScoreComponent extends ScoreComponent {
+    formula: string
 }

@@ -15,7 +15,8 @@ export class BoostParser implements Parser {
             type: ScoreComponentType.Boost,
             children: [],
             result: explainScoreComponent.value,
-            modifiedResult: null
+            modifiedResult: null,
+            getChildByType: type => null
         }
     }
 
