@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import {ExplainScoreComponent, Parser} from "../../../src/models/parsers/Parser";
 import {TfNormParser} from "../../../src/models/parsers/TfNormParser";
+import {ChildrenCalculation, ScoreComponentType} from "../../../src/models/ScoreComponent";
 
 describe("TfNormParser", () => {
 
@@ -39,6 +40,14 @@ describe("TfNormParser", () => {
 
     it("Can parse correct component", () => {
         expect(tfNormParser.canParse(component.description)).to.be.true
+    });
+
+    it("Parses correctly", () => {
+        const parsedComponent = tfNormParser.parse(component);
+        expect(parsedComponent).to.have.property("formula", "(freq * (k1 + 1)) / (freq + k1 * (1 - b + b * fieldLength / avgFieldLength))");
+        expect(parsedComponent).to.have.property("type", ScoreComponentType.TfNorm);
+        expect(parsedComponent).to.have.property("childrenCalculation", ChildrenCalculation.FormulaVariables);
+        expect(parsedComponent).to.have.property("result", 0.92513394);
     });
 
 });

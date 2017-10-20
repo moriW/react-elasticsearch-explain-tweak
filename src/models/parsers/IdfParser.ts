@@ -1,6 +1,6 @@
 
 import {ExplainScoreComponent, Parser} from "./Parser";
-import {ChildrenCalculation, IdfScoreComponent, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
+import {ChildrenCalculation, FormulaScoreComponent, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
 
 export class IdfParser implements Parser {
 
@@ -8,7 +8,7 @@ export class IdfParser implements Parser {
         return componentDescription.toLocaleLowerCase().indexOf("idf") == 0;
     };
 
-    parse = (explainScoreComponent: ExplainScoreComponent): IdfScoreComponent => {
+    parse = (explainScoreComponent: ExplainScoreComponent): FormulaScoreComponent => {
 
         const funcNameMatches = /(log\(.*\))/g.exec(explainScoreComponent.description);
         const funcName = funcNameMatches[1];

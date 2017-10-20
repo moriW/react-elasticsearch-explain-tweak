@@ -26,6 +26,6 @@ export interface ScoreComponent {
     getChildByType: { (type: ScoreComponentType): ScoreComponent }
 }
 
-export interface IdfScoreComponent extends ScoreComponent {
+export interface FormulaScoreComponent extends ScoreComponent {
     formula: string
 }
