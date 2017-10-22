@@ -9,15 +9,14 @@ export class BoostParser implements Parser {
     };
 
     parse = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
-        return {
+        return new ScoreComponent({
             childrenCalculation: ChildrenCalculation.None,
             label: "Boost",
             type: ScoreComponentType.Boost,
             children: [],
             result: explainScoreComponent.value,
             modifiedResult: null,
-            getChildByType: type => null
-        }
+        });
     }
 
 }

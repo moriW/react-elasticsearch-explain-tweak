@@ -23,15 +23,14 @@ export class RegExpParser implements Parser {
     };
 
     protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroup: string): ScoreComponent => {
-        return {
+        return new ScoreComponent({
             modifiedResult: null,
             label: matchedGroup,
             childrenCalculation: ChildrenCalculation.None,
             children: [],
-            getChildByType: type => null,
             type: ScoreComponentType.Generic,
             result: explainScoreComponent.value
-        }
+        });
     };
 
 }

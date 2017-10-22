@@ -14,11 +14,11 @@ export class IdfParser implements Parser {
         const funcName = funcNameMatches[1];
 
         const children = [
-            this.parseDocFreqChild(explainScoreComponent.details.filter(d => d.description == "docFreq")[0]),
-            this.parseDocCountChild(explainScoreComponent.details.filter(d => d.description == "docCount")[0]),
+            this.parseDocFreqChild(explainScoreComponent.details.find(d => d.description == "docFreq")),
+            this.parseDocCountChild(explainScoreComponent.details.find(d => d.description == "docCount")),
         ];
 
-        return {
+        return new FormulaScoreComponent({
             childrenCalculation: ChildrenCalculation.FormulaVariables,
             label: "IDF",
             type: ScoreComponentType.Idf,
@@ -26,32 +26,29 @@ export class IdfParser implements Parser {
             modifiedResult: null,
             result: explainScoreComponent.value,
             formula: funcName,
-            getChildByType: type => children.filter(ch => ch.type == type)[0]
-        }
+        });
     };
 
     parseDocFreqChild = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
-        return {
+        return new ScoreComponent({
             label: "Document Frequency",
             childrenCalculation: ChildrenCalculation.None,
             children: [],
             modifiedResult: null,
             type: ScoreComponentType.DocumentFrequency,
             result: explainScoreComponent.value,
-            getChildByType: type => null
-        }
+        });
     };
 
     parseDocCountChild = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
-        return {
+        return new ScoreComponent({
             label: "Document Count",
             childrenCalculation: ChildrenCalculation.None,
             children: [],
             modifiedResult: null,
             type: ScoreComponentType.DocumentCount,
             result: explainScoreComponent.value,
-            getChildByType: type => null
-        }
+        });
     }
 
 }

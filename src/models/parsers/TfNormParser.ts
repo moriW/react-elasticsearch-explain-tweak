@@ -17,16 +17,15 @@ export class TfNormParser extends RegExpParser {
     }
 
     protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroup: string): FormulaScoreComponent => {
-        return {
+        return new FormulaScoreComponent({
             type: ScoreComponentType.TfNorm,
             formula: matchedGroup,
             children: this.mapChildren(explainScoreComponent.details, tfNormChildrenParsers),
-            getChildByType: type => null, // TODO: IMPLEMENT
             childrenCalculation: ChildrenCalculation.FormulaVariables,
             label: "TF norm",
             modifiedResult: null,
             result: explainScoreComponent.value
-        }
+        });
     };
 
     mapChildren = (explainScoreComponents: ExplainScoreComponent[], parsers: Parser[]): ScoreComponent[] => {
@@ -35,5 +34,4 @@ export class TfNormParser extends RegExpParser {
             return parser.parse(c);
         })
     }
-
 }
