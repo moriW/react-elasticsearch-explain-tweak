@@ -1,25 +1,27 @@
 
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ChildrenCalculation, FormulaScoreComponent, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
+import {RegExpParser} from "./RegExpParser";
 
-export class TfNormParser implements Parser {
+const tfNormChildrenParsers = [
+    new RegExpParser(/(termFreq)=.*/, 1),
+    new RegExpParser(/parameter\s(.*)/, 1),
+    new RegExpParser(/avgFieldLength/, 0),
+    new RegExpParser(/fieldLength/, 0),
+];
 
-    private regEx = /computed\sas\s(.*)\sfrom/;
+export class TfNormParser extends RegExpParser {
 
-    canParse = (componentDescription: string): boolean => {
-        const matches = this.regEx.exec(componentDescription);
-        return matches.length > 0;
-    };
+    constructor() {
+        super(/computed\sas\s(.*)\sfrom/, 1)
+    }
 
-    parse = (explainScoreComponent: ExplainScoreComponent): FormulaScoreComponent => {
-
-        const formula = this.regEx.exec(explainScoreComponent.description)[1];
-
+    protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroup: string): FormulaScoreComponent => {
         return {
             type: ScoreComponentType.TfNorm,
-            formula,
-            children: [],
-            getChildByType: type => null,
+            formula: matchedGroup,
+            children: this.mapChildren(explainScoreComponent.details, tfNormChildrenParsers),
+            getChildByType: type => null, // TODO: IMPLEMENT
             childrenCalculation: ChildrenCalculation.FormulaVariables,
             label: "TF norm",
             modifiedResult: null,
@@ -27,6 +29,11 @@ export class TfNormParser implements Parser {
         }
     };
 
-
+    mapChildren = (explainScoreComponents: ExplainScoreComponent[], parsers: Parser[]): ScoreComponent[] => {
+        return explainScoreComponents.map(c => {
+            const parser = parsers.find(parser => parser.canParse(c.description));
+            return parser.parse(c);
+        })
+    }
 
 }

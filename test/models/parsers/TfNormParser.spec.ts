@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {ExplainScoreComponent, Parser} from "../../../src/models/parsers/Parser";
 import {TfNormParser} from "../../../src/models/parsers/TfNormParser";
-import {ChildrenCalculation, ScoreComponentType} from "../../../src/models/ScoreComponent";
+import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../../../src/models/ScoreComponent";
 
 describe("TfNormParser", () => {
 
@@ -48,6 +48,24 @@ describe("TfNormParser", () => {
         expect(parsedComponent).to.have.property("type", ScoreComponentType.TfNorm);
         expect(parsedComponent).to.have.property("childrenCalculation", ChildrenCalculation.FormulaVariables);
         expect(parsedComponent).to.have.property("result", 0.92513394);
+    });
+
+    const assertChildParam = (childComponents: ScoreComponent[], label: string, result: number) => {
+        const foundComponents = childComponents.filter(c => c.label == label);
+        expect(foundComponents).to.have.lengthOf(1, `Child component ${label} not found`);
+        expect(foundComponents[0]).to.have.property("result", result);
+        expect(foundComponents[0]).to.have.property("children").with.lengthOf(0);
+        expect(foundComponents[0]).to.have.property("type", ScoreComponentType.Generic);
+    };
+
+    it("Parses all children", () => {
+        const parsedComponent = tfNormParser.parse(component);
+        expect(parsedComponent).to.have.property("children").have.lengthOf(5);
+        assertChildParam(parsedComponent.children, "termFreq", 1);
+        assertChildParam(parsedComponent.children, "k1", 1.2);
+        assertChildParam(parsedComponent.children, "b", 0.75);
+        assertChildParam(parsedComponent.children, "avgFieldLength", 2.137224);
+        assertChildParam(parsedComponent.children, "fieldLength", 2.56);
     });
 
 });
