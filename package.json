@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --compilers ts:ts-node/register ./test/*.spec.ts",
-    "start": "webpack-dev-server --debug --devtool cheap-module-source-map --output-pathinfo --history-api-fallback --hot --inline --progress --colors --port 3000 --open",
+    "start": "webpack-dev-server --debug --devtool cheap-module-source-map --output-pathinfo --history-api-fallback --hot --inline --progress --colors --port 3000",
     "build": "webpack -p --progress --colors"
   },
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.0.4",
     "@types/classnames": "2.2.3",
+    "@types/d3": "^4.10.0",
+    "@types/d3-sankey": "^0.7.1",
     "@types/history": "4.6.1",
     "@types/mocha": "^2.2.43",
     "@types/node": "8.0.41",
@@ -44,6 +46,8 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "d3": "^4.10.0",
+    "d3-sankey": "^0.7.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   }
