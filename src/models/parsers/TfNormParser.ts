@@ -4,8 +4,8 @@ import {ChildrenCalculation, FormulaScoreComponent, ScoreComponent, ScoreCompone
 import {RegExpParser} from "./RegExpParser";
 
 const tfNormChildrenParsers = [
-    new RegExpParser(/(termFreq)=.*/, 1),
-    new RegExpParser(/parameter\s(.*)/, 1),
+    new RegExpParser(/(termFreq)=.*/, 1, 1),
+    new RegExpParser(/parameter\s(.*)/, 1, 1),
     new RegExpParser(/avgFieldLength/, 0),
     new RegExpParser(/fieldLength/, 0),
 ];
@@ -13,13 +13,14 @@ const tfNormChildrenParsers = [
 export class TfNormParser extends RegExpParser {
 
     constructor() {
-        super(/computed\sas\s(.*)\sfrom/, 1)
+        //tfNorm, computed as (freq * (k1 + 1)) / (freq + k1 * (1 - b + b * fieldLength / avgFieldLength)) from:,
+        super(/computed\sas\s(.*)\sfrom/, 1, 1)
     }
 
-    protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroup: string): FormulaScoreComponent => {
+    protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]): FormulaScoreComponent => {
         return new FormulaScoreComponent({
             type: ScoreComponentType.TfNorm,
-            formula: matchedGroup,
+            formula: matchedGroups[1],
             children: this.mapChildren(explainScoreComponent.details, tfNormChildrenParsers),
             childrenCalculation: ChildrenCalculation.FormulaVariables,
             label: "TF norm",

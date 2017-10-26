@@ -23,7 +23,7 @@ describe("RegExpParser", () => {
             "description": "termFreq=1.0",
             "details": []
         };
-        const parsedComponent = new RegExpParser(/(.*)=\d+(\.\d+)?/, 1).parse(explainComponent);
+        const parsedComponent = new RegExpParser(/(.*)=\d+(\.\d+)?/, 1, 1).parse(explainComponent);
         expect(parsedComponent).to.have.property("type", ScoreComponentType.Generic);
         expect(parsedComponent).to.have.property("label", "termFreq");
         expect(parsedComponent).to.have.property("result", 1);

@@ -5,27 +5,29 @@ import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreC
 export class RegExpParser implements Parser {
 
     private regExp: RegExp;
+    private regExpLabelMinGroups: number;
     private regExpLabelGroupIndex: number;
 
-    constructor(regExp: RegExp, regExpLabelGroupIndex: number) {
+    constructor(regExp: RegExp, regExpLabelMinGroups: number, regExpLabelGroupIndex: number = 0) {
         this.regExp = regExp;
+        this.regExpLabelMinGroups = regExpLabelMinGroups;
         this.regExpLabelGroupIndex = regExpLabelGroupIndex;
     }
 
     canParse = (componentDescription: string) => {
         const matches = this.regExp.exec(componentDescription);
-        return matches != null && matches.length >= this.regExpLabelGroupIndex + 1;
+        return matches != null && matches.length >= this.regExpLabelMinGroups + 1;
     };
 
     parse = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
-        const label = this.regExp.exec(explainScoreComponent.description)[this.regExpLabelGroupIndex];
-        return this.mapToScoreComponent(explainScoreComponent, label);
+        const matchedGroups = this.regExp.exec(explainScoreComponent.description)
+        return this.mapToScoreComponent(explainScoreComponent, matchedGroups);
     };
 
-    protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroup: string): ScoreComponent => {
+    protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]): ScoreComponent => {
         return new ScoreComponent({
             modifiedResult: null,
-            label: matchedGroup,
+            label: matchedGroups[this.regExpLabelGroupIndex],
             childrenCalculation: ChildrenCalculation.None,
             children: [],
             type: ScoreComponentType.Generic,
