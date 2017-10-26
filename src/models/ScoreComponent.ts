@@ -1,8 +1,8 @@
 
 export enum ChildrenCalculation {
     Product = "product",
-    Sum = "sum",
-    Max = "max",
+    SumOf = "sum",
+    MaxOf = "max",
     None = "none",
     FormulaVariables = "formula_variables"
 }
@@ -13,7 +13,9 @@ export enum ScoreComponentType {
     TfNorm = "tf_norm",
     Boost = "boost",
     DocumentFrequency = "doc_freq",
-    DocumentCount = "doc_count"
+    DocumentCount = "doc_count",
+    MaxOf = "max_of",
+    SumOf = "sum_of"
 }
 
 export class ScoreComponent {
