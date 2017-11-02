@@ -2,13 +2,13 @@
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
 
-export class BoostParser implements Parser {
+export class BoostParser extends Parser {
 
     canParse = (componentDescription: string) => {
         return componentDescription.toLocaleLowerCase().indexOf("boost") >= 0
     };
 
-    parse = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
+    parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
         return new ScoreComponent({
             childrenCalculation: ChildrenCalculation.None,
             label: "Boost",

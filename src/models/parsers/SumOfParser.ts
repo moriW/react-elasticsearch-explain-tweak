@@ -2,13 +2,13 @@
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
 
-export class SumOfParser implements Parser {
+export class SumOfParser extends Parser {
 
     canParse = (componentDescription: string) => {
         return componentDescription.startsWith("sum of");
     };
 
-    parse = (explainScoreComponent: ExplainScoreComponent) => {
+    parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) => {
         return new ScoreComponent({
             type: ScoreComponentType.SumOf,
             childrenCalculation: ChildrenCalculation.SumOf,

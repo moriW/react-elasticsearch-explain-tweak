@@ -2,13 +2,13 @@
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
 
-export class MaxOfParser implements Parser {
+export class MaxOfParser extends Parser {
 
     canParse = (componentDescription: string) => {
         return componentDescription.startsWith("max of");
     };
 
-    parse = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
+    parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
         return new ScoreComponent({
             type: ScoreComponentType.MaxOf,
             childrenCalculation: ChildrenCalculation.MaxOf,
