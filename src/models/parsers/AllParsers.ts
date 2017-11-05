@@ -11,10 +11,10 @@ const allParsers = [
     new BoostParser(),
     new FieldWeightSimilarityParser(),
     new IdfParser(),
-    new MaxOfParser(),
-    new SumOfParser(),
     new TfNormParser(),
-    new ScoreParser()
+    new ScoreParser(),
+    new MaxOfParser(),
+    new SumOfParser()
 ];
 
 export function getAllParsers() {

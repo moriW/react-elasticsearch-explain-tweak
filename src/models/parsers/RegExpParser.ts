@@ -2,17 +2,10 @@
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
 
-export class RegExpParser extends Parser {
+export abstract class RegExpParser<TReturnComponent extends ScoreComponent = ScoreComponent> extends Parser<TReturnComponent> {
 
-    private regExp: RegExp;
-    private regExpLabelMinGroups: number;
-    private regExpLabelGroupIndex: number;
-
-    constructor(regExp: RegExp, regExpLabelMinGroups: number, regExpLabelGroupIndex: number = 0) {
+    constructor(private regExp: RegExp, private regExpLabelMinGroups: number) {
         super();
-        this.regExp = regExp;
-        this.regExpLabelMinGroups = regExpLabelMinGroups;
-        this.regExpLabelGroupIndex = regExpLabelGroupIndex;
     }
 
     canParse = (componentDescription: string) => {
@@ -20,20 +13,11 @@ export class RegExpParser extends Parser {
         return matches != null && matches.length >= this.regExpLabelMinGroups;
     };
 
-    parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
-        const matchedGroups = this.regExp.exec(explainScoreComponent.description)
+    parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent): TReturnComponent => {
+        const matchedGroups = this.regExp.exec(explainScoreComponent.description);
         return this.mapToScoreComponent(explainScoreComponent, matchedGroups);
     };
 
-    protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]): ScoreComponent => {
-        return new ScoreComponent({
-            modifiedResult: null,
-            label: matchedGroups[this.regExpLabelGroupIndex],
-            childrenCalculation: ChildrenCalculation.None,
-            children: [],
-            type: ScoreComponentType.Generic,
-            result: explainScoreComponent.value
-        });
-    };
+    protected abstract mapToScoreComponent: (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]) => TReturnComponent;
 
 }

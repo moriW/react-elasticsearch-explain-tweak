@@ -37,26 +37,20 @@ export class DocCountParser extends RegExpParser {
 
 }
 
-export class IdfParser extends Parser<FormulaScoreComponent> {
+export class IdfParser extends RegExpParser<FormulaScoreComponent> {
 
-    canParse = (componentDescription: string) => {
-        return componentDescription.toLocaleLowerCase().indexOf("idf") == 0;
-    };
+    constructor() {
+        super(/idf, computed as (log\(.*\))/, 2)
+    }
 
-    parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent): FormulaScoreComponent => {
-
-        const funcNameMatches = /(log\(.*\))/g.exec(explainScoreComponent.description);
-        const funcName = funcNameMatches[1];
-
-        return new FormulaScoreComponent({
-            childrenCalculation: ChildrenCalculation.FormulaVariables,
-            label: "IDF",
-            type: ScoreComponentType.Idf,
-            modifiedResult: null,
-            result: explainScoreComponent.value,
-            formula: funcName,
-        });
-    };
+    mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]): FormulaScoreComponent => new FormulaScoreComponent({
+        childrenCalculation: ChildrenCalculation.FormulaVariables,
+        label: "IDF",
+        type: ScoreComponentType.Idf,
+        modifiedResult: null,
+        result: explainScoreComponent.value,
+        formula: matchedGroups[1],
+    });
 
     getChildrenParsers = (): Parser[] => [
         new DocFreqParser(),

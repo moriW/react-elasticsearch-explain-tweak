@@ -5,14 +5,13 @@ import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../../Sco
 export class SumOfParser extends Parser {
 
     canParse = (componentDescription: string) => {
-        return componentDescription.startsWith("sum of");
+        return componentDescription.startsWith("sum of") || componentDescription.endsWith("sum of:");
     };
 
     parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) => {
         return new ScoreComponent({
             type: ScoreComponentType.SumOf,
             childrenCalculation: ChildrenCalculation.SumOf,
-            children: [], // TODO: MUST CALCULATE CHILDREN
             label: "Sum of:",
             modifiedResult: null,
             result: explainScoreComponent.value
