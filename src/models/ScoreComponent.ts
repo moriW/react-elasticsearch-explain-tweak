@@ -16,7 +16,8 @@ export enum ScoreComponentType {
     DocumentCount = "doc_count",
     MaxOf = "max_of",
     SumOf = "sum_of",
-    FieldWeightSimilarity = "field_weight_similarity"
+    FieldWeightSimilarity = "field_weight_similarity",
+    Score = "score",
 }
 
 export class ScoreComponent {
