@@ -20,8 +20,6 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
                 const logMessage = `No parser found for child '${child.description}' of '${explainScoreComponent.description}'`;
                 if (childParser == null) {
                     console.error(logMessage)
-                } else {
-                    console.warn(logMessage);
                 }
             }
 

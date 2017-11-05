@@ -32,7 +32,7 @@ describe("Parser", () => {
         consoleLogWarnSpy.reset();
     });
 
-    it("logs only warning when all children parses do not match", () => {
+    it("logs error when all children parses do not match", () => {
 
         const parser = new class extends Parser {
             getChildrenParsers = (): Parser[] => [];
@@ -44,20 +44,6 @@ describe("Parser", () => {
 
         expect(console.warn).to.not.be.called;
         expect(console.error).to.be.called;
-    });
-
-    it("logs only error when any of children/fallback parses do not match", () => {
-        const parser = new class extends Parser {
-            getChildrenParsers = (): Parser[] => [];
-            parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) =>
-                new MaxOfParser().parseWithoutChildren(explainScoreComponent)
-        };
-
-        parser.parse(explainScoreComponent, [new BoostParser()]);
-
-        expect(console.warn).to.be.called;
-        expect(console.error).to.not.be.called;
-
     });
 
     it("tries to search in fallback parsers when any of children parsers do not match", () => {
