@@ -1,8 +1,8 @@
 
 import {expect} from "chai";
-import {ExplainScoreComponent} from "../../../src/models/parsers/Parser";
-import {ChildrenCalculation, ScoreComponentType} from "../../../src/models/ScoreComponent";
-import {IdfParser} from "../../../src/models/parsers/IdfParser";
+import {ExplainScoreComponent} from "../../../../src/models/parsers/Parser";
+import {ChildrenCalculation, ScoreComponentType} from "../../../../src/models/ScoreComponent";
+import {IdfParser} from "../../../../src/models/parsers/specific/IdfParser";
 
 describe("IdfParser", () => {
 

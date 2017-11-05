@@ -1,7 +1,7 @@
 
-import {ExplainScoreComponent, Parser} from "./Parser";
-import {ChildrenCalculation, FormulaScoreComponent, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
-import {RegExpParser} from "./RegExpParser";
+import {ExplainScoreComponent, Parser} from "../Parser";
+import {ChildrenCalculation, FormulaScoreComponent, ScoreComponent, ScoreComponentType} from "../../ScoreComponent";
+import {RegExpParser} from "../RegExpParser";
 
 export class TfNormParser extends RegExpParser {
 

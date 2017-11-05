@@ -1,7 +1,7 @@
 import {expect} from "chai";
-import {ExplainScoreComponent, Parser} from "../../../src/models/parsers/Parser";
-import {TfNormParser} from "../../../src/models/parsers/TfNormParser";
-import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../../../src/models/ScoreComponent";
+import {ExplainScoreComponent, Parser} from "../../../../src/models/parsers/Parser";
+import {TfNormParser} from "../../../../src/models/parsers/specific/TfNormParser";
+import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../../../../src/models/ScoreComponent";
 
 describe("TfNormParser", () => {
 

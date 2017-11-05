@@ -1,8 +1,8 @@
 
 import {expect} from "chai";
-import {ExplainScoreComponent} from "../../../src/models/parsers/Parser";
-import {MaxOfParser} from "../../../src/models/parsers/MaxOfParser";
-import {ChildrenCalculation, ScoreComponentType} from "../../../src/models/ScoreComponent";
+import {ExplainScoreComponent} from "../../../../src/models/parsers/Parser";
+import {MaxOfParser} from "../../../../src/models/parsers/specific/MaxOfParser";
+import {ChildrenCalculation, ScoreComponentType} from "../../../../src/models/ScoreComponent";
 
 describe("MaxOfParser", () => {
 

@@ -3,8 +3,8 @@ import {expect, use} from "chai";
 import {ExplainScoreComponent, Parser} from "../../../src/models/parsers/Parser";
 import * as sinon from "sinon";
 import * as sinonChai from "sinon-chai";
-import {MaxOfParser} from "../../../src/models/parsers/MaxOfParser";
-import {BoostParser} from "../../../src/models/parsers/BoostParser";
+import {MaxOfParser} from "../../../src/models/parsers/specific/MaxOfParser";
+import {BoostParser} from "../../../src/models/parsers/specific/BoostParser";
 import {ScoreComponentType} from "../../../src/models/ScoreComponent";
 
 use(sinonChai);

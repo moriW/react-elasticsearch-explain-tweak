@@ -1,8 +1,8 @@
 
 import {DelegatingParser} from "../../../src/models/parsers/DelegatingParser";
-import {BoostParser} from "../../../src/models/parsers/BoostParser";
+import {BoostParser} from "../../../src/models/parsers/specific/BoostParser";
 import * as sinon from "sinon";
-import {MaxOfParser} from "../../../src/models/parsers/MaxOfParser";
+import {MaxOfParser} from "../../../src/models/parsers/specific/MaxOfParser";
 import {expect} from "chai";
 
 describe("DelegatingParser", () => {

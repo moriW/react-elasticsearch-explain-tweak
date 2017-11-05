@@ -1,7 +1,7 @@
 
-import {ExplainScoreComponent, Parser} from "./Parser";
-import {RegExpParser} from "./RegExpParser";
-import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
+import {ExplainScoreComponent, Parser} from "../Parser";
+import {RegExpParser} from "../RegExpParser";
+import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../../ScoreComponent";
 
 export class FieldWeightSimilarityComponent extends ScoreComponent {
 

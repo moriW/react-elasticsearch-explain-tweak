@@ -1,6 +1,6 @@
 
-import {ExplainScoreComponent, Parser} from "./Parser";
-import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../ScoreComponent";
+import {ExplainScoreComponent, Parser} from "../Parser";
+import {ChildrenCalculation, ScoreComponent, ScoreComponentType} from "../../ScoreComponent";
 
 export class SumOfParser extends Parser {
 

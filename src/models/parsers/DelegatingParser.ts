@@ -1,13 +1,12 @@
 
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ScoreComponent} from "../ScoreComponent";
-import {BoostParser} from "./BoostParser";
-import {FieldWeightSimilarityParser} from "./FieldWeightSimilarityParser";
-import {IdfParser} from "./IdfParser";
-import {MaxOfParser} from "./MaxOfParser";
-import {SumOfParser} from "./SumOfParser";
-import {TfNormParser} from "./TfNormParser";
-import {stackOffsetExpand} from "d3-shape";
+import {BoostParser} from "./specific/BoostParser";
+import {FieldWeightSimilarityParser} from "./specific/FieldWeightSimilarityParser";
+import {IdfParser} from "./specific/IdfParser";
+import {MaxOfParser} from "./specific/MaxOfParser";
+import {SumOfParser} from "./specific/SumOfParser";
+import {TfNormParser} from "./specific/TfNormParser";
 
 const allParsers: Parser[] = [
     new BoostParser(),

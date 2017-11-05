@@ -1,8 +1,8 @@
 
 import {expect} from "chai";
-import {BoostParser} from "../../../src/models/parsers/BoostParser";
-import {ExplainScoreComponent} from "../../../src/models/parsers/Parser";
-import {ChildrenCalculation, ScoreComponentType} from "../../../src/models/ScoreComponent";
+import {BoostParser} from "../../../../src/models/parsers/specific/BoostParser";
+import {ExplainScoreComponent} from "../../../../src/models/parsers/Parser";
+import {ChildrenCalculation, ScoreComponentType} from "../../../../src/models/ScoreComponent";
 
 describe("BoostParser", () => {
 

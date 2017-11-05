@@ -1,8 +1,8 @@
 
 import {expect} from "chai";
-import {FieldWeightSimilarityParser} from "../../../src/models/parsers/FieldWeightSimilarityParser";
-import {ExplainScoreComponent} from "../../../src/models/parsers/Parser";
-import {ChildrenCalculation, ScoreComponentType} from "../../../src/models/ScoreComponent";
+import {FieldWeightSimilarityParser} from "../../../../src/models/parsers/specific/FieldWeightSimilarityParser";
+import {ExplainScoreComponent} from "../../../../src/models/parsers/Parser";
+import {ChildrenCalculation, ScoreComponentType} from "../../../../src/models/ScoreComponent";
 
 describe("FieldWeightSimilarityParser", () => {
 
