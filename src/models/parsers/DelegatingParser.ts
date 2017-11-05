@@ -1,21 +1,7 @@
 
 import {ExplainScoreComponent, Parser} from "./Parser";
 import {ScoreComponent} from "../ScoreComponent";
-import {BoostParser} from "./specific/BoostParser";
-import {FieldWeightSimilarityParser} from "./specific/FieldWeightSimilarityParser";
-import {IdfParser} from "./specific/IdfParser";
-import {MaxOfParser} from "./specific/MaxOfParser";
-import {SumOfParser} from "./specific/SumOfParser";
-import {TfNormParser} from "./specific/TfNormParser";
-
-const allParsers: Parser[] = [
-    new BoostParser(),
-    new FieldWeightSimilarityParser(),
-    new IdfParser(),
-    new MaxOfParser(),
-    new SumOfParser(),
-    new TfNormParser(),
-];
+import {getAllParsers} from "./AllParsers";
 
 export class DelegatingParser extends Parser {
 
@@ -28,15 +14,17 @@ export class DelegatingParser extends Parser {
         return capableParser != null;
     };
 
-    parse = (explainScoreComponent: ExplainScoreComponent): ScoreComponent => {
+    parse = (explainScoreComponent: ExplainScoreComponent, fallbackParsers: Parser[] = []): ScoreComponent => {
         const capableParser = this.getCapableParser(explainScoreComponent.description);
         if (capableParser == null)
             throw Error(`No parser found for '${explainScoreComponent.description}'`);
-        return capableParser.parse(explainScoreComponent);
+        return capableParser.parse(explainScoreComponent, fallbackParsers);
     };
 
     getCapableParser = (componentDescription: string): Parser => {
         return this.allParsers.find(parser => parser.canParse(componentDescription));
     };
+
+    static fromAllParsers = (): DelegatingParser => new DelegatingParser(getAllParsers());
 
 }

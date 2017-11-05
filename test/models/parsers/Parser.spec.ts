@@ -36,7 +36,6 @@ describe("Parser", () => {
 
         const parser = new class extends Parser {
             getChildrenParsers = (): Parser[] => [];
-            getFallbackParsers = (): Parser[] => [];
             parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) =>
                 new MaxOfParser().parseWithoutChildren(explainScoreComponent)
         };
@@ -50,12 +49,11 @@ describe("Parser", () => {
     it("logs only error when any of children/fallback parses do not match", () => {
         const parser = new class extends Parser {
             getChildrenParsers = (): Parser[] => [];
-            getFallbackParsers = (): Parser[] => [new BoostParser()];
             parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) =>
                 new MaxOfParser().parseWithoutChildren(explainScoreComponent)
         };
 
-        parser.parse(explainScoreComponent);
+        parser.parse(explainScoreComponent, [new BoostParser()]);
 
         expect(console.warn).to.be.called;
         expect(console.error).to.not.be.called;
@@ -65,12 +63,11 @@ describe("Parser", () => {
     it("tries to search in fallback parsers when any of children parsers do not match", () => {
         const parser = new class extends Parser {
             getChildrenParsers = (): Parser[] => [];
-            getFallbackParsers = (): Parser[] => [new BoostParser()];
             parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) =>
                 new MaxOfParser().parseWithoutChildren(explainScoreComponent)
         };
 
-        const parsed = parser.parse(explainScoreComponent);
+        const parsed = parser.parse(explainScoreComponent, [new BoostParser()]);
 
         expect(parsed.children).to.be.lengthOf(1);
         expect(parsed.children[0]).to.have.property("type", ScoreComponentType.Boost);

@@ -11,12 +11,12 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
 
     canParse = (componentDescription: string): boolean => false;
 
-    parse = (explainScoreComponent: ExplainScoreComponent): TReturnComponent => {
+    parse = (explainScoreComponent: ExplainScoreComponent, fallbackParsers: Parser[] = []): TReturnComponent => {
         const parsed = this.parseWithoutChildren(explainScoreComponent);
         parsed.children = explainScoreComponent.details.map(child => {
             let childParser = this.getChildrenParsers().find(parser => parser.canParse(child.description));
             if (childParser == null) {
-                childParser = this.getFallbackParsers().find(parser => parser.canParse(child.description));
+                childParser = fallbackParsers.find(parser => parser.canParse(child.description));
                 const logMessage = `No parser found for child '${child.description}' of '${explainScoreComponent.description}'`;
                 if (childParser == null) {
                     console.error(logMessage)
@@ -26,7 +26,7 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
             }
 
             if (childParser != null) {
-                return childParser.parse(child)
+                return childParser.parse(child, fallbackParsers)
             } else {
                 return null;
             }
@@ -38,12 +38,5 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
     parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent): TReturnComponent => { throw Error("parseWithoutChildren not implemented") };
 
     getChildrenParsers = (): Parser<ScoreComponent>[] => [];
-
-    /**
-     * When any of Parsers returned by getChildrenParsers do not fit, Parser will search
-     * for Parser returned by getFallbackParsers to handle children
-     * @returns {Parser[]}
-     */
-    getFallbackParsers = (): Parser<TReturnComponent>[] => []
 
 }
