@@ -22,6 +22,7 @@ export enum ScoreComponentType {
 
 export class ScoreComponent {
 
+    id: number;
     type: ScoreComponentType;
     label: string;
     result: number;

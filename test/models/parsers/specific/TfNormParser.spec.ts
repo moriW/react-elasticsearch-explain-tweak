@@ -16,6 +16,11 @@ describe("TfNormParser", () => {
                 "details": []
             },
             {
+                "value": 1,
+                "description": "phraseFreq=1.0",
+                "details": []
+            },
+            {
                 "value": 1.2,
                 "description": "parameter k1",
                 "details": []
@@ -60,12 +65,13 @@ describe("TfNormParser", () => {
 
     it("Parses all children", () => {
         const parsedComponent = tfNormParser.parse(component);
-        expect(parsedComponent).to.have.property("children").have.lengthOf(5);
+        expect(parsedComponent).to.have.property("children").have.lengthOf(6);
         assertChildParam(parsedComponent.children, "termFreq", 1);
         assertChildParam(parsedComponent.children, "k1", 1.2);
         assertChildParam(parsedComponent.children, "b", 0.75);
         assertChildParam(parsedComponent.children, "avgFieldLength", 2.137224);
         assertChildParam(parsedComponent.children, "fieldLength", 2.56);
+        assertChildParam(parsedComponent.children, "phraseFreq", 1);
     });
 
 });

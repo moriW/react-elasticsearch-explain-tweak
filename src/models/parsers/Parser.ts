@@ -1,5 +1,6 @@
 
 import {ScoreComponent} from "../ScoreComponent";
+import {ParsingContext} from "./ParsingContext";
 
 export interface ExplainScoreComponent {
     value: number,
@@ -11,8 +12,9 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
 
     canParse = (componentDescription: string): boolean => false;
 
-    parse = (explainScoreComponent: ExplainScoreComponent, fallbackParsers: Parser[] = []): TReturnComponent => {
+    parse = (explainScoreComponent: ExplainScoreComponent, fallbackParsers: Parser[] = [], parsingContext: ParsingContext = new ParsingContext()): TReturnComponent => {
         const parsed = this.parseWithoutChildren(explainScoreComponent);
+        parsed.id = parsingContext.generateNewComponentId();
         parsed.children = explainScoreComponent.details.map(child => {
             let childParser = this.getChildrenParsers().find(parser => parser.canParse(child.description));
             if (childParser == null) {
@@ -24,7 +26,7 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
             }
 
             if (childParser != null) {
-                return childParser.parse(child, fallbackParsers)
+                return childParser.parse(child, fallbackParsers, parsingContext)
             } else {
                 return null;
             }

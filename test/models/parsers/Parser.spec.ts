@@ -59,4 +59,16 @@ describe("Parser", () => {
         expect(parsed.children[0]).to.have.property("type", ScoreComponentType.Boost);
     });
 
+    it("assigns new id for each parsed component", () => {
+        const parser = new class extends Parser {
+            getChildrenParsers = (): Parser[] => [];
+            parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) =>
+                new MaxOfParser().parseWithoutChildren(explainScoreComponent)
+        };
+
+        const parsed = parser.parse(explainScoreComponent, [new BoostParser()]);
+
+        expect(parsed.id).to.be.eq(0);
+        expect(parsed.children[0].id).to.be.eq(1);
+    })
 });
