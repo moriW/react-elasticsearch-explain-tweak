@@ -2,45 +2,28 @@
 import * as React from "react";
 import * as d3 from "d3";
 import * as d3Sankey from "d3-sankey";
-import {SankeyGraph, SankeyLayout, SankeyLink, SankeyNode, SankeyNodeMinimal} from "d3-sankey";
 import {SankeyGraphLinkExtra, SankeyGraphNodeExtra, SankeyScoreComponentsData} from "../types/SankeyScoreComponentsData";
 
-export class SankeyDiagram extends React.Component<{}, {}> {
+interface SankeyDiagramProps {
+    graphData: SankeyScoreComponentsData
+}
+
+export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
 
     private svgElement: SVGElement = null;
 
-    private sankeyGraphData: SankeyScoreComponentsData = null;
-
     componentDidMount() {
-
-        this.sankeyGraphData = {
-            "nodes": [
-                {"name": "node0", nodeId: 0},
-                {"name": "node1", nodeId: 1},
-                {"name": "node2", nodeId: 2},
-                {"name": "node3", nodeId: 3},
-                {"name": "node4", nodeId: 4},
-            ],
-            "links": [
-                {"source": 0, "target": 2, "value": 2},
-                {"source": 1, "target": 2, "value": 2},
-                {"source": 1, "target": 3, "value": 2},
-                {"source": 0, "target": 4, "value": 2},
-                {"source": 2, "target": 3, "value": 2},
-                {"source": 2, "target": 4, "value": 2},
-                {"source": 3, "target": 4, "value": 4}
-            ]
-        };
 
         const {width, height} = d3.select(this.svgElement).node().getBoundingClientRect();
 
         const sankeyLayout = d3Sankey.sankey<SankeyGraphNodeExtra, SankeyGraphLinkExtra>()
             .nodeId(node => node.nodeId)
-            .nodeWidth(36)
-            .nodePadding(100)
+            .nodeAlign(d3Sankey.sankeyLeft)
+            .nodeWidth(10)
+            .nodePadding(40)
             .extent([[1, 1], [width - 1, height - 6]]);
 
-        sankeyLayout(this.sankeyGraphData);
+        sankeyLayout(this.props.graphData);
         this.forceUpdate();
     }
 
@@ -67,12 +50,10 @@ export class SankeyDiagram extends React.Component<{}, {}> {
         </div>
     }
 
-    getSankeyNodes = () => this.sankeyGraphData == null ? null : this.sankeyGraphData.nodes.map(n =>
+    getSankeyNodes = () => this.props.graphData == null ? null : this.props.graphData.nodes.map(n =>
         <rect key={n.index} fill="blue" height={n.y1 - n.y0} width={n.x1 - n.x0} x={n.x0} y={n.y0} />);
 
-
-    getSankeyLinks = () => this.sankeyGraphData == null ? null : this.sankeyGraphData.links.map(l =>
+    getSankeyLinks = () => this.props.graphData == null ? null : this.props.graphData.links.map(l =>
         <path key={l.index} d={d3Sankey.sankeyLinkHorizontal()(l)} stroke="url(#linear)" fill="none" strokeWidth={Math.max(1, l.width)} />);
-
 
 }

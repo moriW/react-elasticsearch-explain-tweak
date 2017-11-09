@@ -49,10 +49,15 @@
     "webpack-dev-server": "^2.9.2"
   },
   "dependencies": {
+    "@types/react-chartjs-2": "^2.0.2",
+    "chart.js": "^2.7.1",
+    "chartjs": "^0.3.24",
     "classnames": "^2.2.5",
     "d3": "^4.10.0",
     "d3-sankey": "^0.7.1",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-chartjs-2": "^2.6.4",
+    "react-dom": "^16.0.0",
+    "regression": "^2.0.0"
   }
 }

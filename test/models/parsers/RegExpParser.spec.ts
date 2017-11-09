@@ -23,6 +23,8 @@ describe("RegExpParser", () => {
         })
     });
 
+    it("throws error when global regexp is passed", () => {
 
+    })
 
 });
