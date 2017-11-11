@@ -1,4 +1,6 @@
 
+import {BaseScoreComponent} from "./BaseScoreComponent";
+
 export enum ChildrenCalculation {
     Product = "product",
     SumOf = "sum",
@@ -20,7 +22,7 @@ export enum ScoreComponentType {
     Score = "score",
 }
 
-export class ScoreComponent {
+export class ScoreComponent implements BaseScoreComponent {
 
     id: number;
     type: ScoreComponentType;

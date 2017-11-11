@@ -5,6 +5,7 @@ export interface SankeyGraphNodeExtra {
     name: string;
     nodeId: number;
     value: number;
+    originalValue: number;
 }
 
 export interface SankeyGraphLinkExtra {

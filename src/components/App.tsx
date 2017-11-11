@@ -23,9 +23,9 @@ export class App extends React.Component<{}, {}> {
 
         return <div>
             <SankeyDiagram graphData={sankeyGraphData} />
-            <InterpolationCurve
-                points={regressionPoints.map((rp, i) => ({x: i, y: rp}))}
-                curvePoints={regressionResult.curvePoints} />
+            {/*<InterpolationCurve*/}
+                {/*points={regressionPoints.map((rp, i) => ({x: i, y: rp}))}*/}
+                {/*curvePoints={regressionResult.curvePoints} />*/}
         </div>
     }
 

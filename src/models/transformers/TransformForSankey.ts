@@ -2,12 +2,14 @@
 import {ScoreComponent} from "../ScoreComponent";
 import * as regression from 'regression';
 import {SankeyScoreComponentsData} from "../../types/SankeyScoreComponentsData";
+import {BaseScoreComponent} from "../BaseScoreComponent";
 
-function addNodesAndLinksRecursively(scoreComponent: ScoreComponent, sankeyData: SankeyScoreComponentsData) {
+function addNodesAndLinksRecursively(scoreComponent: BaseScoreComponent, sankeyData: SankeyScoreComponentsData) {
     sankeyData.nodes.push({
         name: scoreComponent.label,
         nodeId: scoreComponent.id,
-        value: scoreComponent.result
+        value: scoreComponent.result,
+        originalValue: scoreComponent.result
     });
 
     scoreComponent.children.forEach(child => {
@@ -20,7 +22,7 @@ function addNodesAndLinksRecursively(scoreComponent: ScoreComponent, sankeyData:
    });
 }
 
-export default function transformForSankey(scoreComponent: ScoreComponent): SankeyScoreComponentsData {
+export default function transformForSankey(scoreComponent: BaseScoreComponent): SankeyScoreComponentsData {
     const data: SankeyScoreComponentsData = {
         nodes: [],
         links: []
@@ -30,8 +32,12 @@ export default function transformForSankey(scoreComponent: ScoreComponent): Sank
     return data;
 }
 
+function filterUnique(val: number, index: number, array: number[]) {
+    return array.indexOf(val) == index
+}
+
 export function getPointsForRegression(data: SankeyScoreComponentsData): number[] {
-    return data.links.map(l => l.value).sort((a, b) => a - b);
+    return data.links.map(l => l.value).filter(filterUnique).sort((a, b) => a - b);
 }
 
 interface Point {
@@ -56,7 +62,8 @@ export function exponentialRegression(regressionPoints: number[]): ExponentialRe
         b,
         curvePoints: regressionResult.points.map(p => ({x: p[0], y: p[1]})),
         inverseFn: function(y: number): number {
-            return (1/a)*(Math.log(y/b));
+            //return (1/a)*(Math.log(y/b));
+            return Math.max(Math.log(y * 2), 0.5);
         }
     }
 }
