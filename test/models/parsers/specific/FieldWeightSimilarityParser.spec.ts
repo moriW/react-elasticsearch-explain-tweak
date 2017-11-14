@@ -7,18 +7,32 @@ import {ChildrenCalculation, ScoreComponentType} from "../../../../src/models/Sc
 describe("FieldWeightSimilarityParser", () => {
 
     const parser = new FieldWeightSimilarityParser();
-    const component: ExplainScoreComponent = {
+    const phraseComponent: ExplainScoreComponent = {
         "value": 16.93343,
         "description": `weight(czechName:"brown sugar" in 1870) [PerFieldSimilarity], result of:`,
         "details": []
     };
 
-    it("Can parse correct component", () => {
-        expect(parser.canParse(component.description)).to.be.true
+    const singleWordComponent: ExplainScoreComponent = {
+        "value": 16.93343,
+        "description": `weight(czechName:brown in 1870) [PerFieldSimilarity], result of:`,
+        "details": []
+    };
+
+    it("Can parse correct phrase component", () => {
+        expect(parser.canParse(phraseComponent.description)).to.be.true
+    });
+
+    it("Can parse correct single word component", () => {
+        expect(parser.canParse(singleWordComponent.description)).to.be.true
+    });
+
+    it("Can parse correct component with diacritics", () => {
+        expect(parser.canParse(`weight(czechName:"hnědý" in 1870) [PerFieldSimilarity], result of:`)).to.be.true
     });
 
     it("Parses component correctly", () => {
-        const parsed = parser.parse(component);
+        const parsed = parser.parse(phraseComponent);
         expect(parsed).to.have.property("modifiedResult").null;
         expect(parsed).to.have.property("result", 16.93343);
         expect(parsed).to.have.property("children").with.lengthOf(0);

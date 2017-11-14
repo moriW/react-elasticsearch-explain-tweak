@@ -11,6 +11,8 @@ import transformForSankey, {
 } from "../../../src/models/transformers/TransformForSankey";
 import {SankeyGraphLinkExtra, SankeyGraphNodeExtra} from "../../../src/types/SankeyScoreComponentsData";
 import * as d3Sankey from "d3-sankey";
+import {mergeScoreComponents} from "../../../src/models/MergeScoreModels";
+import multipleHitsSample from "../../../src/samples/MultipleHitsSample";
 
 describe("transformForSankey", () => {
 
@@ -30,17 +32,12 @@ describe("transformForSankey", () => {
     // TODO: REMOVE
     it("calculates sankey data", () => {
 
-        const scoreComponent = DelegatingParser.fromAllParsers().parse(explainScoreComponent, getAllParsers());
-        const sankeyData = transformForSankey(scoreComponent);
+        const parsedFirstComponent = DelegatingParser.fromAllParsers().parse(multipleHitsSample.hits.hits[0]._explanation, getAllParsers());
+        const parsedSecondComponent = DelegatingParser.fromAllParsers().parse(multipleHitsSample.hits.hits[multipleHitsSample.hits.hits.length - 1]._explanation, getAllParsers());
+        const mergedScoreComponent = mergeScoreComponents([parsedFirstComponent], [parsedSecondComponent]);
+        const mergedSankeyGraphData = transformForSankey(mergedScoreComponent[0]);
 
-        const sankeyLayout = d3Sankey.sankey<SankeyGraphNodeExtra, SankeyGraphLinkExtra>()
-            .nodeId(node => node.nodeId)
-            .nodeWidth(10)
-            .nodePadding(5)
-            .extent([[1, 1], [800 - 1, 500 - 6]]);
-
-        sankeyLayout(sankeyData);
-        console.log("xxxx");
+        console.log("asdfdsaf");
 
 
     });
