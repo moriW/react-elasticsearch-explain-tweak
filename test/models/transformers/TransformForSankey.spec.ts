@@ -31,23 +31,30 @@ describe("transformForSankey", () => {
 
     // TODO: REMOVE
     it("calculates sankey data", () => {
-
         const parsedFirstComponent = DelegatingParser.fromAllParsers().parse(multipleHitsSample.hits.hits[0]._explanation, getAllParsers());
         const parsedSecondComponent = DelegatingParser.fromAllParsers().parse(multipleHitsSample.hits.hits[multipleHitsSample.hits.hits.length - 1]._explanation, getAllParsers());
         const mergedScoreComponent = mergeScoreComponents([parsedFirstComponent], [parsedSecondComponent]);
         const mergedSankeyGraphData = transformForSankey(mergedScoreComponent[0]);
 
+        interpolate(mergedSankeyGraphData, exponentialRegression().inverseFn);
+
+        const sankeyLayout = d3Sankey.sankey<SankeyGraphNodeExtra, SankeyGraphLinkExtra>()
+            .nodeId(node => node.nodeId)
+            .nodeAlign(d3Sankey.sankeyLeft)
+            .nodeWidth(10)
+            .nodePadding(35)
+            .extent([[1, 1], [800 - 1, 500 - 6]]);
+
+        sankeyLayout(mergedSankeyGraphData);
+
         console.log("asdfdsaf");
-
-
     });
 
     it("updates values with exponential regression", () => {
         const scoreComponent = DelegatingParser.fromAllParsers().parse(explainScoreComponent, getAllParsers());
         const sankeyData = transformForSankey(scoreComponent);
 
-        const regressionPoints = getPointsForRegression(sankeyData);
-        const result = exponentialRegression(regressionPoints);
+        const result = exponentialRegression();
         interpolate(sankeyData, result.inverseFn);
 
         console.log("aaaa");

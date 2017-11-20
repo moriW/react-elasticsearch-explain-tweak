@@ -41,7 +41,7 @@ export default class InterpolationCurve extends React.Component<InterpolationCur
                 },
                 {
                     label: 'Regression curve',
-                    fill: false,
+                    fill: true,
                     lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
                     borderColor: 'rgba(75,192,192,1)',
@@ -65,8 +65,8 @@ export default class InterpolationCurve extends React.Component<InterpolationCur
             ]
         };
 
-        return <div style={{width: 500, height: 500}}>
-            <Bubble data={data} height={300} />
+        return <div style={{width: 800, height: 200}}>
+            <Bubble data={data} />
         </div>;
     }
 

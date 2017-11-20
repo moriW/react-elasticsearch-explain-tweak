@@ -43,9 +43,6 @@ export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
                         <stop offset="100%" stopColor="#0a5" stopOpacity="1.0" />
                     </linearGradient>
                 </defs>
-
-                <text x={50} y={50} color="blue" fontSize={15} offset={0}>aaaaa</text>
-
                 <g>
                     {this.graphDataCalculated && this.getSankeyLinks()}
                 </g>
@@ -62,15 +59,27 @@ export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
     getSankeyNodes = () => this.props.graphData == null ? null : this.props.graphData.nodes.map(n =>
         <rect key={n.index} fill="blue" height={n.y1 - n.y0} width={n.x1 - n.x0} x={n.x0} y={n.y0} />);
 
-    getSankeyLinks = () => this.props.graphData == null ? null : this.props.graphData.links.map(l =>
-        <path key={l.index} d={d3Sankey.sankeyLinkHorizontal()(l)} stroke="url(#linear)" fill="none" strokeWidth={Math.max(1, l.width)} />);
+    getSankeyLinks = () => {
+        if (this.props.graphData == null)
+            return null;
+        const nodes: JSX.Element[] = [];
+        this.props.graphData.links.forEach(l => {
+            nodes.push(<path key={l.index} d={d3Sankey.sankeyLinkHorizontal()(l)} stroke="darkgreen" fill="none" strokeWidth={Math.max(0.1, l.width)} />);
+            if (l.secondaryValue != null && l.secondaryValue < l.value) {
+                nodes.push(<path key={l.index + "_2"} d={d3Sankey.sankeyLinkHorizontal()(l)} stroke="lightgreen" fill="none" strokeWidth={Math.max(0.1,  l.width / l.value * l.secondaryValue)} />);
+            }
+        });
+        return nodes;
+    };
+
 
     getSankeyLinksLabels = () => {
         return this.props.graphData == null ? null : this.props.graphData.links.map(l => {
-            const width = 120;
+            const width = 100;
+            const mergedTarget = (l.target as any);
             return <svg key={l.index} x={(l.target as any).x0 - (width + 10)} y={l.y1 - 10} width={width} height={20}>
-                    <rect fill="red" rx={5} ry={5} width="100%" height="100%" />
-                    <text x={width / 2} y={15} color="blue" fontSize={10} offset={0} textAnchor="middle" fontFamily="verdana">{(l.target as any).originalValue.toFixed(3)}</text>
+                    <rect fill="black" fillOpacity={0.3} rx={5} ry={5} width="100%" height="100%" />
+                    <text x={width / 2} y={15} fill="white" fontWeight="bold" fontSize={12} offset={0} textAnchor="middle" fontFamily="Verdana">{mergedTarget.originalValue.toFixed(3)}, {mergedTarget.originalSecondaryValue.toFixed(3)}</text>
                 </svg>
 
         })

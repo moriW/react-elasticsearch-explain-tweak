@@ -1,24 +1,29 @@
 
-import {ScoreComponent} from "../ScoreComponent";
 import * as regression from 'regression';
 import {SankeyScoreComponentsData} from "../../types/SankeyScoreComponentsData";
 import {BaseScoreComponent} from "../BaseScoreComponent";
+import {MergedScoreComponent} from "../MergeScoreModels";
 
 function addNodesAndLinksRecursively(scoreComponent: BaseScoreComponent, sankeyData: SankeyScoreComponentsData) {
+
     sankeyData.nodes.push({
         name: scoreComponent.label,
         nodeId: scoreComponent.id,
         value: scoreComponent.result,
-        originalValue: scoreComponent.result
+        originalValue: scoreComponent.result,
+        originalSecondaryValue: Math.min((scoreComponent as MergedScoreComponent).second.result, (scoreComponent as MergedScoreComponent).first.result),
+        scoreComponent: scoreComponent
     });
 
     scoreComponent.children.forEach(child => {
-       sankeyData.links.push({
+        const mergedChild = child as MergedScoreComponent;
+        sankeyData.links.push({
            source: scoreComponent.id,
            target: child.id,
-           value: child.result
-       });
-       addNodesAndLinksRecursively(child, sankeyData);
+           value: mergedChild.result,
+           secondaryValue: Math.min(mergedChild.first.result, mergedChild.second.result)
+        });
+        addNodesAndLinksRecursively(child, sankeyData);
    });
 }
 
@@ -52,15 +57,15 @@ interface ExponentialRegressionResult {
     inverseFn: { (y: number): number }
 }
 
-export function exponentialRegression(regressionPoints: number[]): ExponentialRegressionResult {
-    const regressionResult = regression.exponential(regressionPoints.map((d, i) => [i, d]));
+export function exponentialRegression(): ExponentialRegressionResult {
+    /*const regressionResult = regression.exponential(regressionPoints.map((d, i) => [i, d]));
     const a = regressionResult.equation[1];
-    const b = regressionResult.equation[0];
+    const b = regressionResult.equation[0];*/
 
     return {
-        a,
-        b,
-        curvePoints: regressionResult.points.map(p => ({x: p[0], y: p[1]})),
+        a: null,
+        b: null,
+        curvePoints: null,
         inverseFn: function(y: number): number {
             //return (1/a)*(Math.log(y/b));
             return Math.max(Math.log(y * 2), 0.5);
@@ -69,5 +74,8 @@ export function exponentialRegression(regressionPoints: number[]): ExponentialRe
 }
 
 export function interpolate(data: SankeyScoreComponentsData, interpolationFn: { (y: number): number }) {
-    data.links.forEach(l => l.value = interpolationFn(l.value));
+    data.links.forEach(l => {
+        l.value = interpolationFn(l.value);
+        l.secondaryValue = interpolationFn(l.secondaryValue);
+    });
 }

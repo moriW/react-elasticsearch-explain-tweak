@@ -12,7 +12,7 @@ export class MergedScoreComponent implements BaseScoreComponent {
 
     children: MergedScoreComponent[];
 
-    constructor(private first: ScoreComponent, private second: ScoreComponent) {
+    constructor(public first: ScoreComponent, public second: ScoreComponent) {
         if (first == null) {
             throw Error("First component is null");
         }
