@@ -32,7 +32,7 @@ export class ScoreComponent implements BaseScoreComponent {
     modifiedResult: number = null;
     children: ScoreComponent[] = [];
     childrenCalculation: ChildrenCalculation = ChildrenCalculation.None;
-
+    addToSubDataSet: boolean = false;
 
     constructor(init: Partial<ScoreComponent>) {
         Object.assign(this, init);

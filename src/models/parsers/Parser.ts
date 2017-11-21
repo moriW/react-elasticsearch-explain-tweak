@@ -14,6 +14,9 @@ export class Parser<TReturnComponent extends ScoreComponent = ScoreComponent> {
 
     parse = (explainScoreComponent: ExplainScoreComponent, fallbackParsers: Parser[] = [], parsingContext: ParsingContext = new ParsingContext()): TReturnComponent => {
         const parsed = this.parseWithoutChildren(explainScoreComponent);
+        if (parsed.addToSubDataSet) {
+            parsingContext.subDataSets.push(parsed);
+        }
         parsed.id = parsingContext.generateNewComponentId();
         parsed.children = explainScoreComponent.details.map(child => {
             let childParser = this.getChildrenParsers().find(parser => parser.canParse(child.description));

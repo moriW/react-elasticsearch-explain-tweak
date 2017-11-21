@@ -6,6 +6,8 @@ import * as sinonChai from "sinon-chai";
 import {MaxOfParser} from "../../../src/models/parsers/specific/MaxOfParser";
 import {BoostParser} from "../../../src/models/parsers/specific/BoostParser";
 import {ScoreComponentType} from "../../../src/models/ScoreComponent";
+import {ParsingContext} from "../../../src/models/parsers/ParsingContext";
+import {FieldWeightSimilarityParser} from "../../../src/models/parsers/specific/FieldWeightSimilarityParser";
 
 use(sinonChai);
 
@@ -70,5 +72,27 @@ describe("Parser", () => {
 
         expect(parsed.id).to.be.eq(0);
         expect(parsed.children[0].id).to.be.eq(1);
-    })
+    });
+
+    it("adds component to sub data set if indicator is set", () => {
+
+        const phraseComponent: ExplainScoreComponent = {
+            "value": 16.93343,
+            "description": `weight(czechName:"brown sugar" in 1870) [PerFieldSimilarity], result of:`,
+            "details": []
+        };
+
+        const parser = new class extends Parser {
+            getChildrenParsers = (): Parser[] => [];
+            parseWithoutChildren = (explainScoreComponent: ExplainScoreComponent) =>
+                new FieldWeightSimilarityParser().parseWithoutChildren(explainScoreComponent)
+        };
+
+        const parsingContext = new ParsingContext();
+        parser.parse(phraseComponent, undefined, parsingContext);
+
+        expect(parsingContext.subDataSets).to.have.length(1);
+        expect(parsingContext.subDataSets[0]).to.have.property("result", 16.93343);
+    });
+
 });

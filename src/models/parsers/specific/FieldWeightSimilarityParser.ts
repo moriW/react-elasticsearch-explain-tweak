@@ -30,7 +30,8 @@ export class FieldWeightSimilarityParser extends RegExpParser {
             type: ScoreComponentType.FieldWeightSimilarity,
             result: explainScoreComponent.value,
             fieldName: matchedGroups[1],
-            fieldQuery: matchedGroups[2]
+            fieldQuery: matchedGroups[2],
+            addToSubDataSet: true
         });
     };
 
