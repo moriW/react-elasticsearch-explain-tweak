@@ -1,48 +1,27 @@
 import * as React from "react";
 import {Bubble} from "react-chartjs-2";
-
-interface Point {
-    x: number;
-    y: number;
-}
+import Point from "../types/Point";
+import {ChartOptions} from "chartjs";
 
 interface InterpolationCurveProps {
     points: Point[],
-    curvePoints: Point[]
+    curvePoints: { [propname: string]: Point[] }
 }
 
 export default class InterpolationCurve extends React.Component<InterpolationCurveProps, {}> {
 
     render() {
 
+        const colors = [
+            "red", "green", "blue"
+        ];
+
         const data = {
             labels: ['Interpolation'],
-            datasets: [
-                {
-                    label: 'Regression points',
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: 'rgba(75,192,192,0.4)',
-                    borderColor: 'rgba(75,192,192,1)',
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: 'rgba(75,192,192,1)',
-                    pointBackgroundColor: '#fff',
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                    pointHoverBorderColor: 'rgba(220,220,220,1)',
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: this.props.points.map(p => ({ x: p.x , y: p.y, r: 5 }))
-                },
-                {
-                    label: 'Regression curve',
+            datasets: Object.keys(this.props.curvePoints).map(key => {
+                return {
+                    label: key,
                     fill: true,
-                    lineTension: 0.1,
                     backgroundColor: 'rgba(75,192,192,0.4)',
                     borderColor: 'rgba(75,192,192,1)',
                     borderCapStyle: 'butt',
@@ -58,14 +37,14 @@ export default class InterpolationCurve extends React.Component<InterpolationCur
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: this.props.curvePoints,
-                    type: "line"
+                    data: this.props.curvePoints[key],
+                    type: "line",
+                    lineTension: 0.3
                 }
-
-            ]
+            })
         };
 
-        return <div style={{width: 800, height: 200}}>
+        return <div style={{width: 800, height: 600}}>
             <Bubble data={data} />
         </div>;
     }

@@ -68,7 +68,7 @@ export function exponentialRegression(): ExponentialRegressionResult {
         curvePoints: null,
         inverseFn: function(y: number): number {
             //return (1/a)*(Math.log(y/b));
-            return Math.max(Math.log(y * 2), 0.5);
+            return Math.max(Math.log(Math.pow(y, 2)), 0.5);
         }
     }
 }

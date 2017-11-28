@@ -24,7 +24,7 @@ export class FieldWeightSimilarityParser extends RegExpParser {
     protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]): FieldWeightSimilarityComponent => {
         return new FieldWeightSimilarityComponent({
             modifiedResult: null,
-            label: matchedGroups[0],
+            label: matchedGroups[2],
             childrenCalculation: ChildrenCalculation.SumOf,
             children: [],
             type: ScoreComponentType.FieldWeightSimilarity,
