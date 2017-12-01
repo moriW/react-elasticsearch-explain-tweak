@@ -14,6 +14,8 @@ export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
 
     private graphDataCalculated = false;
 
+    private graphPadding = { top: 50, right: 50, bottom: 50, left: 50 };
+
     componentDidMount() {
 
         const {width, height} = d3.select(this.svgElement).node().getBoundingClientRect();
@@ -22,8 +24,8 @@ export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
             .nodeId(node => node.nodeId)
             .nodeAlign(d3Sankey.sankeyLeft)
             .nodeWidth(10)
-            .nodePadding(35)
-            .extent([[1, 1], [width - 1, height - 6]]);
+            .nodePadding(50)
+            .extent([[1, 1], [width - (this.graphPadding.left + this.graphPadding.right), height - (this.graphPadding.top + this.graphPadding.bottom)]]);
 
         sankeyLayout(this.props.graphData);
         this.graphDataCalculated = true;
@@ -36,21 +38,26 @@ export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
 
     render() {
         return <div>
-            <svg ref={this.setSvgElement} width={800} height={500} textRendering="geometricPrecision">
+            <svg ref={this.setSvgElement} width={800} height={800} textRendering="geometricPrecision">
                 <defs>
                     <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%"   stopColor="#05a" stopOpacity="0.5" />
                         <stop offset="100%" stopColor="#0a5" stopOpacity="1.0" />
                     </linearGradient>
                 </defs>
-                <g>
-                    {this.graphDataCalculated && this.getSankeyLinks()}
-                </g>
-                <g>
-                    {this.graphDataCalculated && this.getSankeyNodes()}
-                </g>
-                <g>
-                    {this.graphDataCalculated && this.getSankeyLinksLabels()}}
+                <g transform={"translate(" + this.graphPadding.left + ", " + this.graphPadding.top + ")"}>
+                    <g>
+                        {this.graphDataCalculated && this.getSankeyLinks()}
+                    </g>
+                    <g>
+                        {this.graphDataCalculated && this.getSankeyNodes()}
+                    </g>
+                    <g>
+                        {this.graphDataCalculated && this.getSankeyLinksLabels()}}
+                    </g>
+                    <g>
+                        {this.graphDataCalculated && this.getSankeyNodeLabels()}
+                    </g>
                 </g>
             </svg>
         </div>
@@ -83,6 +90,24 @@ export class SankeyDiagram extends React.Component<SankeyDiagramProps, {}> {
                 </svg>
 
         })
-    } ;
+    };
+
+    getSankeyNodeLabels = () => {
+        return this.props.graphData == null ? null : this.props.graphData.nodes.map(n => {
+            const labelWidth = 100;
+            const labelYOffset = 30;
+            const nodeCenter = (n.x1 - n.x0) / 2;
+            const labelCenter = labelWidth / 2;
+            const labelXOffset = labelCenter - nodeCenter;
+            const labelX = n.x0 - labelXOffset;
+
+            return <svg key={n.value + "label"} x={labelX} y={n.y0 - labelYOffset} width={labelWidth} height={20}>
+                <rect fill="black" rx={5} ry={5} width="100%" height="100%" />
+                <text x={labelWidth / 2} y={15} fill="white" fontWeight="bold" fontSize={12} offset={0} textAnchor="middle" fontFamily="Verdana">{n.name}</text>
+            </svg>
+
+
+        })
+    };
 
 }
