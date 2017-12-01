@@ -13,45 +13,53 @@ import Point from "../types/Point";
 import {ParsingContext} from "../models/parsers/ParsingContext";
 import {SelectableStackedChart} from "./SelectableStackedChart";
 
+const regressionResult = exponentialRegression();
+
+const parsedMultipleHits = multipleHitsSample.hits.hits.map(h => {
+    const parsingContext = new ParsingContext();
+    const parsedComponent = DelegatingParser.fromAllParsers().parse(h._explanation, getAllParsers(), parsingContext);
+    return {
+        parsedComponent,
+        subDataSets: parsingContext.subDataSets
+    }
+});
+
+const allHitsPoints: { [propname: string]: Point[] } = {
+    finalScore: []
+};
+
+parsedMultipleHits.forEach((hit, i) => {
+    allHitsPoints["finalScore"].push({ x: i, y: hit.parsedComponent.result });
+    hit.subDataSets.forEach(sub => {
+        if (allHitsPoints[sub.label] == null)
+            allHitsPoints[sub.label] = [];
+        allHitsPoints[sub.label].push({ x: i, y: sub.result });
+    })
+});
+
+let firstIndex = 0;
+let secondIndex = parsedMultipleHits.length - 1;
+
 export class App extends React.Component<{}, {}> {
+
+    private onPointsSelected = (startPointIndex: number, endPointIndex: number) => {
+        firstIndex = startPointIndex;
+        secondIndex = endPointIndex;
+        this.forceUpdate()
+    };
 
     render() {
 
-        const regressionResult = exponentialRegression();
+        const mergedScoreComponent = mergeScoreComponents([parsedMultipleHits[firstIndex].parsedComponent], [parsedMultipleHits[secondIndex].parsedComponent]);
 
-        const parsedMultipleHits = multipleHitsSample.hits.hits.map(h => {
-            const parsingContext = new ParsingContext();
-            const parsedComponent = DelegatingParser.fromAllParsers().parse(h._explanation, getAllParsers(), parsingContext);
-            return {
-                parsedComponent,
-                subDataSets: parsingContext.subDataSets
-            }
-        });
-
-        const allHitsPoints: { [propname: string]: Point[] } = {
-            finalScore: []
-        };
-
-        parsedMultipleHits.forEach((hit, i) => {
-            allHitsPoints["finalScore"].push({ x: i, y: hit.parsedComponent.result });
-            hit.subDataSets.forEach(sub => {
-                if (allHitsPoints[sub.label] == null)
-                    allHitsPoints[sub.label] = [];
-                allHitsPoints[sub.label].push({ x: i, y: sub.result });
-            })
-        });
-
-
-        const mergedScoreComponent = mergeScoreComponents([parsedMultipleHits[0].parsedComponent], [parsedMultipleHits[parsedMultipleHits.length - 1].parsedComponent]);
         const mergedSankeyGraphData = transformForSankey(mergedScoreComponent[0]);
-
         interpolate(mergedSankeyGraphData, regressionResult.inverseFn);
 
-        return <div>
+        return <div onClick={() => this.forceUpdate()}>
             <SankeyDiagram graphData={mergedSankeyGraphData} />
             <div style={{height: 100}}>&nbsp;</div>
+            <SelectableStackedChart points={allHitsPoints} width={800} height={300} onSelect={this.onPointsSelected} />
             <InterpolationCurve points={[]} curvePoints={allHitsPoints} />
-            <SelectableStackedChart points={allHitsPoints} width={800} height={300} />
         </div>
     }
 

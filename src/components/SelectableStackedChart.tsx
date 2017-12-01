@@ -7,7 +7,8 @@ import {ScaleLinear} from "d3-scale";
 interface SelectableStackedChartProps {
     points: { [datasetLabel: string]: Point[] };
     width: number,
-    height: number
+    height: number,
+    onSelect: { (point1Index: number, point2Index: number): void }
 }
 
 export class SelectableStackedChart extends React.Component<SelectableStackedChartProps, {}> {
@@ -74,21 +75,24 @@ export class SelectableStackedChart extends React.Component<SelectableStackedCha
 
     private capturingMouse = false;
 
-    private startValue: number = null;
-    private endValue: number = null;
+    private startValueXPos: number = null;
+    private endValueXPos: number = null;
 
     chartMouseMoveHandler = (e: React.MouseEvent<SVGGElement>) => {
         if (!this.capturingMouse)
             return;
-        const point = this.getRelativePoint(e);
-        this.endValue = this.xRange.invert(point.x);
+        const index = this.getPointIndexFromEvent(e);
+        this.endValueXPos = index + 1;
+        this.props.onSelect(this.startValueXPos, this.endValueXPos);
         this.forceUpdate();
     };
 
     chartMouseDownHandler = (e: React.MouseEvent<SVGGElement>) => {
-        const point = this.getRelativePoint(e);
-        this.startValue = this.xRange.invert(point.x);
-        this.endValue = null;
+        const index = this.getPointIndexFromEvent(e);
+        this.startValueXPos = index;
+        this.endValueXPos = index + 1;
+
+        //this.props.onSelect(this.startValue, this.endValue);
         this.capturingMouse = true;
         this.forceUpdate();
     };
@@ -98,10 +102,9 @@ export class SelectableStackedChart extends React.Component<SelectableStackedCha
         this.forceUpdate();
     };
 
-    private getRelativePoint(e: React.MouseEvent<SVGGElement>): Point {
+    private getPointIndexFromEvent(e: React.MouseEvent<SVGGElement>) {
         let mouseX = e.nativeEvent.offsetX - this.margin.left;
-        let dataPointIndex = d3.bisectLeft(this.allXValues, this.xRange.invert(mouseX), 1);
-        return { x: this.xRange(this.allXValues[dataPointIndex]), y: e.nativeEvent.offsetY - this.margin.top };
+        return d3.bisectLeft(this.allXValues, this.xRange.invert(mouseX), 1);
     }
 
     render() {
@@ -109,9 +112,9 @@ export class SelectableStackedChart extends React.Component<SelectableStackedCha
         this.chartSize = { width: this.props.width - this.margin.left - this.margin.right, height: this.props.height - this.margin.top - this.margin.bottom };
 
         let selectionRect = null;
-        if (this.startValue != null && this.endValue != null) {
-            let x1 = this.xRange(this.startValue);
-            let x2 = this.xRange(this.endValue);
+        if (this.startValueXPos != null && this.endValueXPos != null) {
+            let x1 = this.xRange(this.startValueXPos);
+            let x2 = this.xRange(this.endValueXPos);
             selectionRect = <rect height={this.chartSize.height} x={x1} y={0} width={x2 - x1} fill="lightgreen" fillOpacity={0.5} />
         }
 

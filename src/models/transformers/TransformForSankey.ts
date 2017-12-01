@@ -5,7 +5,6 @@ import {BaseScoreComponent} from "../BaseScoreComponent";
 import {MergedScoreComponent} from "../MergeScoreModels";
 
 function addNodesAndLinksRecursively(scoreComponent: BaseScoreComponent, sankeyData: SankeyScoreComponentsData) {
-
     sankeyData.nodes.push({
         name: scoreComponent.label,
         nodeId: scoreComponent.id,
@@ -14,7 +13,6 @@ function addNodesAndLinksRecursively(scoreComponent: BaseScoreComponent, sankeyD
         originalSecondaryValue: Math.min((scoreComponent as MergedScoreComponent).second.result, (scoreComponent as MergedScoreComponent).first.result),
         scoreComponent: scoreComponent
     });
-
     scoreComponent.children.forEach(child => {
         const mergedChild = child as MergedScoreComponent;
         sankeyData.links.push({

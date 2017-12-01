@@ -27,7 +27,6 @@ export class TfNormParser extends RegExpParser {
         new SimpleRegExpParser(/(phraseFreq)=.*/, 1, 1),
         new SimpleRegExpParser(/parameter\s(.*)/, 1, 1),
         new SimpleRegExpParser(/avgFieldLength/, 0),
-        new SimpleRegExpParser(/fieldLength/, 0),
         new SimpleRegExpParser(/fieldLength/, 0)
     ];
 }
