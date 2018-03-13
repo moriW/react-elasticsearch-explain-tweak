@@ -18,7 +18,7 @@ export class FieldWeightSimilarityParser extends RegExpParser {
 
     constructor() {
         // weight(czechName:"brown sugar" in 1870) [PerFieldSimilarity], result of
-        super(/weight\((.*):"?([a-zA-Z+ěščřžýáíé\s]*)"?\sin.*\).*/, 2)
+        super(/weight\((.*):"?([a-zA-Z+ěščřžýáíé\s\u4e00-\u9fa5]*)"?\sin.*\).*/, 2)
     }
 
     protected mapToScoreComponent = (explainScoreComponent: ExplainScoreComponent, matchedGroups: string[]): FieldWeightSimilarityComponent => {
